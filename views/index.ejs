@@ -7,32 +7,12 @@
     <script type="text/javascript" src="/javascripts/angular.min.js"></script>
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript">
-      //controller for chart controlls
-      var start_date;
-      var end_date;
-      var operation;
-
-      var module=angular.module("gCharts",[]);
-
-      var chartController=module.controller("chartController",function($scope){
-        $scope.output='';
-
-        $scope.submit= function(){
-          start_date=this.sdate;
-          end_date=new Date(this.edate.getMonth()+'/'+this.edate.getDay()+'/'+this.edate.getFullYear()+' 23:59:00');
-
-          //console.log(end_date);
-          operation=this.operation;
-          $scope.output=start_date+':'+end_date+':'+operation;
-        }
-      });
 
       google.load("visualization", "1", {packages:["corechart"]});
-      google.setOnLoadCallback(drawChart(start_date,end_date,operation));
-      function drawChart(start_date,end_date,operation) {
-        var urlR='http://localhost:3000/api/orders/getOrders?start_date='+start_date+'&end_date='+end_date+'&op='+operation;
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var urlR='http://localhost:3000/api/orders/getOrders?start_date=01%2F01%2F2015&end_date=12%2F01%2F2015&op=count';
 
-        console.log(urlR);
         $.ajax({
           url: urlR,
           type: 'GET',
@@ -70,7 +50,7 @@
     </script>
 
     <script>
-      /*
+
       var module=angular.module("gCharts",[]);
 
       var chartController=module.controller("chartController",function($scope){
@@ -85,7 +65,6 @@
             $scope.output=start_date+':'+end_date+':'+operation;
           }
       });
-*/
     </script>
   </head>
   <body>
@@ -95,7 +74,7 @@
     <input type="date" id="edate" ng-model="edate"  required/>
     <input type="text" id="txtoperation" ng-model="operation" required/>
     <input type="submit" id="btnSubmit" value="submit"/></br>
-
+<input type="hidden" id="hdnOutput" value={{output}} >
     {{output}}
   </div>
      <div id="chart_div" style="width: 100%; height: 300px;"></div>
